@@ -13,8 +13,12 @@ jobs:
       - name: clone gh as bare mirror
         run: git clone --mirror "https://github.com/${{ github.repository }}.git" repo.git
 
-      - name: push --mirror to codex
+      - name: push branches + tags to codex
         working-directory: repo.git
         env:
           CODEX_PAT: ${{ secrets.CODEX_PAT }}
-        run: git push --mirror "https://chroma:${CODEX_PAT}@codex.kurobox.me/miyo-rin/pyon.git"
+        run: |
+          git push --prune \
+            "https://chroma:${CODEX_PAT}@codex.kurobox.me/miyo-rin/pyon.git" \
+            "+refs/heads/*:refs/heads/*" \
+            "+refs/tags/*:refs/tags/*"
